@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
+<div layout:fragment="sidemenu" class="menu">
+    <ul>
+        <li th:each="m:${arr}" th:text="${m}"></li>
+    </ul>
+</div>
+
+<div layout:fragment="content" class="content">
+    <h1>ex3.html </h1>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+    const arr=[[${arr}]]
+</script>
