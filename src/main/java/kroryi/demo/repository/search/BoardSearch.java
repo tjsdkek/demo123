@@ -8,5 +8,5 @@ public interface BoardSearch {
 
     Page<Board> search(Pageable pageable);
 
-
+    Page<Board> searchAll(String[] types, String keyword, Pageable pageable);
 }

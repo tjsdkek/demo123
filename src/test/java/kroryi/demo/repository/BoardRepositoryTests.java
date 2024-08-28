@@ -1,41 +1,48 @@
 package kroryi.demo.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import kroryi.demo.domain.Board;
-import lombok.extern.log4j.Log4j2;
+import kroryi.demo.domain.QBoard;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
+
 @SpringBootTest
-@Log4j2
 public class BoardRepositoryTests {
+
+    private static final Logger log = LoggerFactory.getLogger(BoardRepositoryTests.class);
+
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    JPAQueryFactory jpaQueryFactory;
 //
-//    @Test
-//    public void testInsert(){
-//        IntStream.rangeClosed(1,100).forEach(i -> {
-//            Board board = Board.builder()
-//                    .title("하하하" + i)
-//                    .content("내용" +i)
-//                    .writer("사용자" + (i%10))
-//                    .build();
-//            Board result = boardRepository.save(board);
-//            log.info("BNO: {}", result.getBno());
-//
-//
-//        });
-//    }
-//
+    @Test
+    public void testInsert(){
+        IntStream.rangeClosed(1,100).forEach(i -> {
+            Board board = Board.builder()
+                    .title("하하하" + i)
+                    .content("내용" +i)
+                    .writer("사용자" + (i%10))
+                    .build();
+            Board result = boardRepository.save(board);
+            log.info("BNO: {}", result.getBno());
+
+
+        });
+    }
+
 //    @Test
 //    public void testSelect(){
 //        Long bno = 100L;
@@ -88,11 +95,65 @@ public class BoardRepositoryTests {
 //    }
 
     @Test
-    public void testSearch(){
-        Pageable pageable = PageRequest.of(0,10, Sort.by("bno").descending());
+    public void testSearch() {
+        QBoard qBoard = QBoard.board;
+        List<String> boardList = jpaQueryFactory
+                .select(qBoard.title)
+                .from(qBoard)
+                .where(qBoard.title.like("%하하하8%"))
+                .orderBy(qBoard.title.asc())
+                .fetch();
+
+        for (String board : boardList) {
+            System.out.println("--------------");
+            System.out.println("title->" + board);
+        }
+
+//        List<Tuple> boardList = jpaQueryFactory
+//                .select(qBoard.title, qBoard.content)
+//                .from(qBoard)
+//                .where(qBoard.title.like("하하하7"))
+//                .orderBy(qBoard.content.asc())
+//                .fetch();
+//        System.out.println(boardList);
+//
+//        for(Tuple board : boardList){
+//            System.out.println(board.get(qBoard.title));
+//            System.out.println(board.get(qBoard.content));
+//        }
+//        Pageable pageable = PageRequest.of(0,10, Sort.by("bno").descending());
+//        boardRepository.search(pageable);
+
+    }
+
+//    @Autowired
+//    private BoardSearch boardSearch;
+
+    @Test
+    public void testBoardSearch() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+
         boardRepository.search(pageable);
 
     }
+
+    @Test
+    public void testBoardSearchAll() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+        QBoard qBoard = QBoard.board;
+
+        String[] types={"t", "c", "w"};
+        Page<Board> result = boardRepository.searchAll(types, "하하하8", pageable);
+        System.out.println(result.getTotalPages());
+        System.out.println(result.getTotalElements());
+        System.out.println(result.getContent());
+        log.info(String.valueOf(result.getTotalPages()));
+
+        result.getContent().forEach( board-> {
+            System.out.println(board.getTitle());
+        });
+    }
+
 
 
 }
