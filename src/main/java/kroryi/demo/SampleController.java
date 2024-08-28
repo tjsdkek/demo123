@@ -24,7 +24,7 @@ public class SampleController {
     }
     @GetMapping("/ex/ex2")
     public void ex2(Model model) {
-        log.info("ex/ex2--------------");
+//        log.info("ex/ex2--------------");
         List<String> strList = IntStream.range(1,10)
                 .mapToObj(i->"Data" + i)
                 .collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class SampleController {
 
     @GetMapping("/hello")
     public void hello(Model model) {
-        log.info("hello--------------");
+//        log.info("hello--------------");
 
         model.addAttribute("message", "Hello World!");
     }
