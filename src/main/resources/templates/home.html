@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 여기는 홈입니다.
+
+<ul>
+    <li th:each="user : ${list}">
+        <span th:text="${user.getId()}"></span>-
+        <span th:text="${user.getUsername()}"></span>
+        <span th:text="${user.getAddress()}"></span>
+        <span th:text="${user.getEmail()}"></span>
+    </li>
+</ul>
+
+
 </body>
 </html>
