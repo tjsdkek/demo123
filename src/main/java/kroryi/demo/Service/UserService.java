@@ -20,6 +20,10 @@ import java.util.stream.IntStream;
 public class UserService {
     private final UserRepository userRepository;
 
+    public List<User> findAll(){
+        return userRepository.findAll();
+    }
+
     public User updateUser(User user) {
         User existingUser = userRepository.findById(user.getId())
                 .orElseThrow( ()->

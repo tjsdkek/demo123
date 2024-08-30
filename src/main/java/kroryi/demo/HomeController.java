@@ -29,12 +29,21 @@ public class HomeController {
     @Autowired
     UserService userService;
 
+    @GetMapping("/userfindall")
+    public String userfindall(Model model) {
+
+        List<User> userList = userService.findAll();
+        userList.forEach((list)->{
+            log.info("{}:{}", list.getId(), list.getUsername());
+        });
+
+        model.addAttribute("list", userList);
+        return "home";
+    }
+
     @GetMapping("/home")
     public String home() {
 
-        List<Employee>  employeeList =employeeService.findDepartment("회계부서");
-
-        System.out.println(employeeList.toString());
 
         return "home";
     }

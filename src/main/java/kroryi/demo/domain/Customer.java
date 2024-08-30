@@ -1,9 +1,6 @@
 package kroryi.demo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.context.annotation.Bean;
 
@@ -13,10 +10,18 @@ import org.springframework.context.annotation.Bean;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name="customer")
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name="name")
     private String name;
+
+    @Column(name="email")
+    private String email;
+
+    @Column(name="age")
+    private int age;
 }

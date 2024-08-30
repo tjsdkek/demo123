@@ -1,10 +1,7 @@
 package kroryi.demo.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,11 +12,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="employees")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="name", nullable = false)
     private String name;
-    private String department;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+//    private String department;
+    @ManyToOne
+    @JoinColumn(name="department_id", referencedColumnName = "id")
+    private Department department;
 }
