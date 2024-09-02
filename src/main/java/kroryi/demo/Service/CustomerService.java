@@ -13,6 +13,12 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    public Customer getCustomer(Long id) {
+
+        return customerRepository.findById(id).orElse(null);
+    }
+
+
     public List<Customer> getAllCustomer() {
         return customerRepository.findAll();
     }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// json으로 응답하는 Controller
+// API통신이나 비동기 통신 시 사용
 @RestController
 public class EmployeeController {
 
