@@ -2,33 +2,34 @@ package kroryi.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.math.BigDecimal;
 
+@Builder
+@Getter
+@Setter
 @Entity
-@Table(name = "order_item")
-@Data
+@Table(name = "order_item", schema = "webdb")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @Column(name = "price", nullable = false, precision = 38, scale = 2)
+    private BigDecimal price;
 
-    @ManyToOne
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @Column(nullable = false)
-    private int quantity;
-
-    @Column(nullable = false)
-    private BigDecimal price;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
 }

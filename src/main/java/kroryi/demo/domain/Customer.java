@@ -30,9 +30,9 @@ public class Customer {
     @Column(name="age")
     private int age;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="address_id", referencedColumnName = "id")
-    private Address address;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name="address_id", referencedColumnName = "id")
+//    private Address address;
 
     //CascadeType.REMOVE 부모 엔티티가 삭제될 때 자식 엔티티로 함께 삭제
     //orphanRemoveal = true 부모 엔티티가 자식 엔티티와의 관계를 끊을대
@@ -40,5 +40,13 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();
+
+    @ToString.Exclude
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+
+
 }
 
