@@ -1,6 +1,8 @@
 package kroryi.demo.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,11 +17,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 public class BoardDTO implements Serializable {
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime registerDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifyDate;
     private Long bno;
+    @NotEmpty
     private String title;
+    @NotEmpty
     private String content;
+    @NotEmpty
     private String writer;
     private String address;
 }

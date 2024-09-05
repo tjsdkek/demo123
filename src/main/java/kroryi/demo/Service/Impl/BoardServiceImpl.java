@@ -10,6 +10,7 @@ import kroryi.demo.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +42,19 @@ public class BoardServiceImpl implements BoardService {
     public BoardDTO readOne(Long id) {
         Optional<Board> result = boardRepository.findById(id);
         Board board = result.orElseThrow();
+
+        // 아래는 BoardDTO Board 클래스의 필드가 철자가 불일치 할경우 사용
+        PropertyMap<Board, BoardDTO> boardMap = new PropertyMap<Board, BoardDTO>() {
+            @Override
+            protected void configure() {
+                map(source.getRegDate()).setRegisterDate(null);
+                map(source.getModDate()).setModifyDate(null);
+            }
+        };
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(boardMap);
+
         BoardDTO dto = modelMapper.map(board, BoardDTO.class);
 
         return dto;
@@ -66,20 +80,33 @@ public class BoardServiceImpl implements BoardService {
         String[] types = pageRequestDTO.getTypes();
         String keyword = pageRequestDTO.getKeyword();
         Pageable pageable = pageRequestDTO.getPageable("bno");
-        Page<Board> result = boardRepository.searchAll(types, keyword,pageable);
+        Page<Board> result = boardRepository.searchAll(types, keyword, pageable);
 
         log.info("list---------> {}", result);
 
+        // 아래는 BoardDTO Board 클래스의 필드가 철자가 불일치 할경우 사용
+        PropertyMap<Board, BoardDTO> boardMap = new PropertyMap<Board, BoardDTO>() {
+            @Override
+            protected void configure() {
+                map(source.getRegDate()).setRegisterDate(null);
+            }
+        };
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(boardMap);
+
         // resulet에는 total , dtolist,
         List<BoardDTO> dtoList = result.getContent().stream()
-                .map( board-> modelMapper.map(board, BoardDTO.class))
+                .map(board -> modelMapper.map(board, BoardDTO.class))
                 .collect(Collectors.toList());
+
 
         return PageResponseDTO.<BoardDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .pageRange(defaultPageRange)
                 .dtoList(dtoList)
-                .total((int)result.getTotalElements())
+                .total((int) result.getTotalElements())
                 .build();
     }
+
 }

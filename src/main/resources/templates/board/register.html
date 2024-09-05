@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    게시글 등록
+                </div>
+                <div class="card-body">
+                    <form action="/board/register" method="post">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목 :</span>
+                            <input type="text" name="title" class="form-control" placeholder="제목을 입력하세요!">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용 :</span>
+                            <textarea class="form-control col-sm-5" rows="5" name="content"></textarea>
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">작성자 :</span>
+                            <input type="text" class="form-control" name="writer" placeholder="작성자를 입력하세요.">
+                        </div>
+                        <div class="my-4">
+                            <div class="float-end">
+                                <button class="btn btn-primary" type="submit">등록</button>
+                                <button class="btn btn-secondary" type="reset">취소</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script layout:fragment="script" th:inline="javascript">
+    const errors = [[${errors}]]
+    console.log(errors)
+    let errorMsg = ''
+    if(errors){
+        for(let i=0; i < errors.length; i++){
+            errorMsg += `${errors[i].field}은 ${errors[i].code}\n`
+        }
+        alert(errorMsg)
+    }
+
+</script>

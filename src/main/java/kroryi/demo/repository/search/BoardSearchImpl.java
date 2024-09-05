@@ -70,7 +70,16 @@ public class BoardSearchImpl extends
                         builder.or(board.content.like('%' + keyword + '%'));
                         break;
                     case "w":
-                        builder.or(board.writer.eq(keyword));
+                        builder.or(board.writer.like('%' + keyword + '%'));
+                        break;
+                    case "tc":
+                        builder.or(board.title.like('%' + keyword + '%'));
+                        builder.or(board.content.like('%' + keyword + '%'));
+                        break;
+                    case "tcw":
+                        builder.or(board.title.like('%' + keyword + '%'));
+                        builder.or(board.content.like('%' + keyword + '%'));
+                        builder.or(board.writer.like('%' + keyword + '%'));
                         break;
 
                 }
