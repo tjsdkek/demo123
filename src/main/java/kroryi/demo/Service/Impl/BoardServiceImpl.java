@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kroryi.demo.Service.BoardService;
 import kroryi.demo.domain.Board;
 import kroryi.demo.dto.BoardDTO;
+import kroryi.demo.dto.BoardListReplyCountDTO;
 import kroryi.demo.dto.PageRequestDTO;
 import kroryi.demo.dto.PageResponseDTO;
 import kroryi.demo.repository.BoardRepository;
@@ -106,6 +107,37 @@ public class BoardServiceImpl implements BoardService {
                 .pageRange(defaultPageRange)
                 .dtoList(dtoList)
                 .total((int) result.getTotalElements())
+                .build();
+    }
+
+    @Override
+    public PageResponseDTO<BoardListReplyCountDTO> listWithReplyCount(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("bno");
+        Page<BoardListReplyCountDTO> result = boardRepository.searchWithReplyCount(types, keyword, pageable);
+
+
+        PropertyMap<Board, BoardListReplyCountDTO> boardMap = new PropertyMap<Board, BoardListReplyCountDTO>() {
+            @Override
+            protected void configure() {
+                map(source.getRegDate()).setRegisterDate(null);
+            }
+        };
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addMappings(boardMap);
+
+        // resulet에는 total , dtolist,
+        List<BoardListReplyCountDTO> dtoList = result.getContent().stream()
+                .map(board -> modelMapper.map(board, BoardListReplyCountDTO.class))
+                .collect(Collectors.toList());
+
+        return PageResponseDTO.<BoardListReplyCountDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(result.getContent())
+                .pageRange(defaultPageRange)
+                .total((int)result.getTotalElements())
                 .build();
     }
 
