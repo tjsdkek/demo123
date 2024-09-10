@@ -75,9 +75,9 @@ public class ReplyRepositoryTests {
     @Test
     public void testRegister(){
         ReplyDTO replyDTO = ReplyDTO.builder()
-                .replyText("댓글....")
-                .replyer("사용자 11")
-                .bno(105L)
+                .replyText("다해줬잖아")
+                .replyer("신창섭")
+                .bno(206L)
                 .build();
 
         replyService.register(replyDTO);

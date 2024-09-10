@@ -6,7 +6,7 @@ import kroryi.demo.dto.PageResponseDTO;
 import kroryi.demo.dto.ReplyDTO;
 
 public interface ReplyService {
-    Long register(ReplyDTO reply);
+    Long register(ReplyDTO replyDTO);
 
     ReplyDTO read(Long rno);
     void modify(ReplyDTO replyDTO);

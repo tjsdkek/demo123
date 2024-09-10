@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ReplyRepositroy extends JpaRepository<Reply, Long> {
 
-    @Query("select r from Reply r where r.board.bno = :bno")
+    @Query("select r from Reply r where r.board.bno = :bno order by r.rno desc")
     Page<Reply> listOfBoard(Long bno, Pageable pageable);
 }
