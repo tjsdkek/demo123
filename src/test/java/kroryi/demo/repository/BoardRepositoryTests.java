@@ -2,6 +2,7 @@ package kroryi.demo.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kroryi.demo.domain.Board;
+import kroryi.demo.domain.BoardImage;
 import kroryi.demo.domain.QBoard;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 
@@ -154,6 +157,35 @@ public class BoardRepositoryTests {
         });
     }
 
+    @Test
+    public void testInsertWithImages(){
+        Board board = Board.builder()
+                .title("Image test")
+                .content("첨부파일 테스트")
+                .writer("tester")
+                .build();
+
+        // 실제 사진은 없고 Board와 BoardImage 테이블에
+        // 글도 등록되고 BoardImage에도 파일에 대한 정보가 입력되는지 확인용
+        for(int i = 0; i < 3 ; i++) {
+            board.addImage(UUID.randomUUID().toString(), "file" + i + "jpg" );
+        }
+        boardRepository.save(board);
+    }
+
+    @Test
+    public void testReadWithImages(){
+        Optional<Board> result = boardRepository.findByIdWithImages(511L);
+
+        Board board = result.orElseThrow();
+
+        log.info("Board ---> {}", board);
+        log.info("--------------------");
+//        log.info("Board Image ---> {}", board.getImagesSet());
+        for(BoardImage boardImage: board.getImagesSet()){
+            log.info("BoardImage ---> {}", boardImage);
+        }
+    }
 
 
 }

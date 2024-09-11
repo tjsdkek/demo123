@@ -15,6 +15,8 @@ public class CustomerServletConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/js/");
         registry.addResourceHandler("/fonts/**")
                 .addResourceLocations("classpath:/static/fonts/");
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("classpath:/static/images/");
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/static/css/");
         registry.addResourceHandler("/assets/**")
