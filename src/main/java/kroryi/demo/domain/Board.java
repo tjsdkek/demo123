@@ -3,6 +3,7 @@ package kroryi.demo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +32,12 @@ public class Board extends BaseEntity{
 
     @OneToMany(mappedBy = "board",
     cascade = {CascadeType.ALL},
-    fetch = FetchType.LAZY)
+    fetch = FetchType.LAZY,
+    orphanRemoval = true) // orphan 고아 board와 boardImage 엔티티간의 연결을 끊는것 쿼리는 delete 쿼리 실행
+    // BoardImage에 있는 데이터를 자동으로 삭제한다
     @Builder.Default
+    @BatchSize(size = 20)
+    @ToString.Exclude
     private Set<BoardImage> imagesSet = new HashSet<>();
 
     public void addImage(String uuid, String fileName){
